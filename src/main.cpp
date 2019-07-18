@@ -230,14 +230,14 @@ public:
   }
 };
 
-class MainMenu : public GameState
+class MainMenu : public Aspen::GameState::GameState
 {
   Player *player;
 
 public:
     MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
     {
-      //player1 animation
+      //player animation
       player = new Player(this, "Player");
       player->GetTransform()->SetPosition(200, 200);
       AddChild(player);
@@ -252,6 +252,11 @@ int main(int argc, char **argv)
     Aspen::Engine::START_FLAGS::CREATE_GRAPHICS_FONTCACHE
   ));
 
+  Aspen::Graphics::Graphics *gfx = new Aspen::Graphics::Graphics(1280, 720);
+  gfx->CreateChild<Aspen::Debug::Debug>();
+  gfx->CreateChild<Aspen::Graphics::FontCache>();
+  engine.AddChild(gfx);
+
   engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MyState>(true);
   
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
@@ -259,7 +264,7 @@ int main(int argc, char **argv)
   engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
   engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
 
-  engine.FindChildOfType<GameStateManager>()->LoadState<MainMenu>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
   while (engine)
     engine();
   return 0;
