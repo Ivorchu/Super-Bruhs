@@ -1,35 +1,39 @@
-#include "Engine.cpp"
-#include "Graphics.cpp"
-#include "UI.cpp"
-#include "Transform.cpp"
-#include "Controller.cpp"
-#include "Physics.cpp"
-#include "Time.cpp"
-#include "Log.cpp"
-#include "Audio.cpp"
-#include "Input.cpp"
-#include "GameState.cpp"
-#include "Debug.cpp"
+#include "Engine.hpp"
+#include "Graphics.hpp"
+#include "UI.hpp"
+#include "Transform.hpp"
+#include "Controller.hpp"
+#include "Physics.hpp"
+#include "Time.hpp"
+#include "Log.hpp"
+#include "Audio.hpp"
+#include "Input.hpp"
+#include "GameState.hpp"
+#include "Debug.hpp"
 #include <iostream>
 
 class MyState : public Aspen::GameState::GameState
 {
+  Aspen::Graphics::Rectangle *rect;
 public:
     MyState(Aspen::Object::Object *parent = nullptr, std::string name = "My State")
       : Aspen::GameState::GameState(parent, name)
     {
-        // Create a new child
-        AddChild(
+      rect = 
             // The child is a new rectangle
             new Aspen::Graphics::Rectangle(
                 // x = 0, y = 0, width = 32, height = 32
-                SDL_Rect({0, 0, 32, 32}),
+                SDL_Rect({50, 50, 200, 50}),
                 // It's black and filled
                 Aspen::Graphics::Colors::BLACK, true,
                 // this is its parent and its name is "Rectangle" (this can be omitted)
                 this, "Rectangle"
-                )
-            );
+                );
+
+        rect->CreateChild<Aspen::Physics::AABBCollider>()->SetSize(200,50);
+        // Create a new child
+        AddChild(rect);
+        
     }
 };
 
