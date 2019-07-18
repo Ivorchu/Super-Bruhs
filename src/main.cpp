@@ -1,5 +1,16 @@
 #include "Engine.cpp"
+#include "Graphics.hpp"
+#include "UI.hpp"
+#include "Transform.hpp"
+#include "Controller.hpp"
+#include "Physics.hpp"
+#include "Time.hpp"
+#include "Log.hpp"
+#include "Audio.hpp"
+#include "Input.hpp"
 #include "GameState.cpp"
+#include "Debug.hpp"
+#include <iostream>
 
 class MyState : public Aspen::GameState::GameState
 {
@@ -33,27 +44,27 @@ class Player : public Aspen::Object::Object
   int AnimationNumber = 1;
 
 public:
-  Player1(Object *parent = nullptr, std::string name = "Player1") : Aspen::Object::Object(parent, name)
+  Player(Object *parent = nullptr, std::string name = "Player") : Aspen::Object::Object(parent, name)
   {
     //int Health = 100;
     //int Attack = 10;
     animation1 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria.png", 96, 96, 2, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria.png", 128, 128, 2, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 2.0f, parent, name);
     animation2 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left.png", 96, 96, 2, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left.png", 128, 128, 2, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 2.0f, parent, name);
     animation3 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria crouch.png", 96, 96, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria crouch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation4 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left crouch.png", 96, 96, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left crouch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation5 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria punch.png", 96, 96, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria punch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation6 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left punch.png", 96, 96, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left punch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     AddChild(animation1);
     AddChild(animation2);
