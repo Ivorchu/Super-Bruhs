@@ -1,15 +1,15 @@
 #include "Engine.cpp"
-#include "Graphics.hpp"
-#include "UI.hpp"
-#include "Transform.hpp"
-#include "Controller.hpp"
-#include "Physics.hpp"
-#include "Time.hpp"
-#include "Log.hpp"
-#include "Audio.hpp"
-#include "Input.hpp"
+#include "Graphics.cpp"
+#include "UI.cpp"
+#include "Transform.cpp"
+#include "Controller.cpp"
+#include "Physics.cpp"
+#include "Time.cpp"
+#include "Log.cpp"
+#include "Audio.cpp"
+#include "Input.cpp"
 #include "GameState.cpp"
-#include "Debug.hpp"
+#include "Debug.cpp"
 #include <iostream>
 
 class MyState : public Aspen::GameState::GameState
@@ -49,22 +49,22 @@ public:
     //int Health = 100;
     //int Attack = 10;
     animation1 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria.png", 128, 128, 2, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite.png", 128, 128, 2, nullptr, "FortniteSpiritsheet"), 
       1.0f / 2.0f, parent, name);
     animation2 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left.png", 128, 128, 2, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite left.png", 128, 128, 2, nullptr, "FortniteSpiritsheet"), 
       1.0f / 2.0f, parent, name);
     animation3 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria crouch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite crouch.png", 128, 128, 1, nullptr, "FortniteSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation4 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left crouch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite left crouch.png", 128, 128, 1, nullptr, "FortniteSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation5 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria punch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite punch.png", 128, 128, 1, nullptr, "FortniteSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     animation6 = new Aspen::Graphics::Animation(
-      new Aspen::Graphics::UniformSpritesheet("./resources/Terraria left punch.png", 128, 128, 1, nullptr, "TerrariaSpiritsheet"), 
+      new Aspen::Graphics::UniformSpritesheet("./resources/Fortnite left punch.png", 128, 128, 1, nullptr, "FortniteSpiritsheet"), 
       1.0f / 1.0f, parent, name);
     AddChild(animation1);
     AddChild(animation2);
@@ -73,7 +73,7 @@ public:
     AddChild(animation5);
     AddChild(animation6);
     CreateChild<Aspen::Transform::Transform>();
-    CreateChild<Aspen::Physics::AABBCollider>()->SetSize(32, 32);
+    CreateChild<Aspen::Physics::AABBCollider>()->SetSize(64, 64);
     CreateChild<Aspen::Physics::Rigidbody>();
     GetTransform()->SetPosition(100, 100);
     animation2->Deactivate();
@@ -92,7 +92,8 @@ public:
   {
     double x = GetRigidbody()->GetVelocityX();
     double y = GetRigidbody()->GetVelocityY();
-
+    int AnimationNumber = 1;
+    
     if (Aspen::Input::KeyPressed(SDLK_w))
     {
       y = -30;
@@ -225,13 +226,46 @@ public:
   }
 };
 
+class MainMenu : public GameState
+{
+  Aspen::Graphics::UI::Text *title;
+  Player *player;
+
+public:
+    MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
+    {
+      //Text/physics
+      title = new Aspen::Graphics::UI::Text("Super Smash Bruhs", "default", 64, this, "Title");
+      AddChild(title);
+      title->GetTransform()->SetPosition(100, 100);
+      title->GetTransform()->SetRotation(0.0f);
+      title->GetTransform()->SetScale(1, 1);
+      title->CreateChild<Aspen::Physics::Rigidbody>();
+
+      //player1 animation
+      player = new Player(this, "Player");
+      player->GetTransform()->SetPosition(200, 200);
+      AddChild(player);
+    }
+};
+
 int main(int argc, char **argv)
 {
-    Aspen::Engine::Engine engine(Aspen::Engine::START_FLAGS::ALL);
+  Aspen::Engine::Engine engine(Aspen::Engine::START_FLAGS::ALL ^ (
+    Aspen::Engine::START_FLAGS::CREATE_GRAPHICS | 
+    Aspen::Engine::START_FLAGS::CREATE_GRAPHICS_DEBUGGER | 
+    Aspen::Engine::START_FLAGS::CREATE_GRAPHICS_FONTCACHE
+  ));
 
-    engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MyState>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MyState>(true);
+  
+  engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
+  engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
+  engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
+  engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
 
-    while (engine)
-        engine();
-    return 0;
+  engine.FindChildOfType<GameStateManager>()->LoadState<MainMenu>(true);
+  while (engine)
+    engine();
+  return 0;
 }
