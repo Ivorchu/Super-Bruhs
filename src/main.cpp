@@ -12,11 +12,11 @@
 #include "Debug.hpp"
 #include <iostream>
 
-class MyState : public Aspen::GameState::GameState
+class MainState : public Aspen::GameState::GameState
 {
   Aspen::Graphics::Rectangle *rect;
 public:
-    MyState(Aspen::Object::Object *parent = nullptr, std::string name = "My State")
+    MainState(Aspen::Object::Object *parent = nullptr, std::string name = "Main State")
       : Aspen::GameState::GameState(parent, name)
     {
       rect = 
@@ -36,6 +36,8 @@ public:
         
     }
 };
+
+
 
 class Player : public Aspen::Object::Object
 {
@@ -242,6 +244,34 @@ public:
       player->GetTransform()->SetPosition(200, 200);
       AddChild(player);
     }
+};
+
+class L1State : public Aspen::GameState::GameState
+{
+    Aspen::Graphics::Camera *cam;
+
+public:
+  L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
+      : Aspen::GameState::GameState(parent, name)
+  {
+    cam = CreateChild<Aspen::Graphics::Camera>();
+    cam->SelectCamera();
+  }
+
+  void OnUpdate()
+  {
+    float cx = obj->GetTransform()->GetXPosition() - Aspen::Graphics::DEFAULT_WINDOW_WIDTH / 2.0f;
+    float cy = obj->GetTransform()->GetYPosition() - Aspen::Graphics::DEFAULT_WINDOW_HEIGHT / 2.0f;
+    cam->GetTransform()->SetPosition(std::max(std::min(cx, 100.0f), -100.0f), cy);
+    if (Aspen::Input::KeyHeld(SDLK_w))
+      obj->GetTransform()->ModifyYPosition(-1);
+    if (Aspen::Input::KeyHeld(SDLK_a))
+      obj->GetTransform()->ModifyXPosition(-1);
+    if (Aspen::Input::KeyHeld(SDLK_s))
+      obj->GetTransform()->ModifyXPosition(1);
+    if (Aspen::Input::KeyHeld(SDLK_d))
+      obj->GetTransform()->ModifyYPosition(1);
+  }
 };
 
 int main(int argc, char **argv)
