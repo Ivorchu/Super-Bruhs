@@ -11,6 +11,24 @@
 #include "GameState.hpp"
 #include "Debug.hpp"
 #include <iostream>
+#include <algorithm>
+
+class MyObject : public Aspen::Graphics::Rectangle
+{
+public:
+    MyObject(Aspen::Object::Object *parent = nullptr, std::string name = "My Object")
+      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 32, 32}), Aspen::Graphics::Colors::BLACK, true, parent, name)
+    {
+      CreateChild<Aspen::Physics::AABBCollider>()->SetSize(32, 32);
+    }
+
+    void OnMouseClick()
+    {
+      Aspen::Log::Debug("I've been clicked");
+      if (Aspen::Input::GetMouse().left.pressed)
+        Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("Main State");
+    }
+};
 
 class MainState : public Aspen::GameState::GameState
 {
@@ -249,11 +267,13 @@ public:
 class L1State : public Aspen::GameState::GameState
 {
     Aspen::Graphics::Camera *cam;
+    MyObject *obj;
 
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
+    obj = CreateChild<MyObject>();
     cam = CreateChild<Aspen::Graphics::Camera>();
     cam->SelectCamera();
   }
@@ -287,7 +307,7 @@ int main(int argc, char **argv)
   gfx->CreateChild<Aspen::Graphics::FontCache>();
   engine.AddChild(gfx);
 
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MyState>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainState>(true);
   
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
@@ -295,6 +315,8 @@ int main(int argc, char **argv)
   engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
 
   engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(true);
+
   while (engine)
     engine();
   return 0;
