@@ -102,9 +102,9 @@ public:
     {
       y = -30;
     }
-    else if (GetTransform()->GetYPosition() > 642)
+    else if (GetTransform()->GetYPosition() > 975)
     {
-      GetTransform()->SetYPosition(642);
+      GetTransform()->SetYPosition(975);
       y = 0;
     }
     if (Aspen::Input::KeyHeld(SDLK_a))
@@ -118,9 +118,9 @@ public:
       animation6->Deactivate();
       x = -5;
     }
-    else if (GetTransform()->GetXPosition() > 1250)
+    else if (GetTransform()->GetXPosition() > 1900)
     {
-    GetTransform()->SetXPosition(1250);
+    GetTransform()->SetXPosition(1900);
     x = 0;
     }
     if (Aspen::Input::KeyPressed(SDLK_s) && (AnimationNumber == 1 || AnimationNumber == 5))
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
     Aspen::Engine::START_FLAGS::CREATE_GRAPHICS_FONTCACHE
   ));
 
-  Aspen::Graphics::Graphics *gfx = new Aspen::Graphics::Graphics(1280, 720);
+  Aspen::Graphics::Graphics *gfx = new Aspen::Graphics::Graphics(1920, 1080);
   gfx->CreateChild<Aspen::Debug::Debug>();
   gfx->CreateChild<Aspen::Graphics::FontCache>();
   engine.AddChild(gfx);
