@@ -13,49 +13,48 @@
 #include <iostream>
 #include <algorithm>
 
-class MyObject : public Aspen::Graphics::Rectangle
+class Button : public Aspen::Graphics::Rectangle
 {
 public:
-    MyObject(Aspen::Object::Object *parent = nullptr, std::string name = "My Object")
-      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 32, 32}), Aspen::Graphics::Colors::BLACK, true, parent, name)
+    Button(Aspen::Object::Object *parent = nullptr, std::string name = "Button")
+      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 64, 64}), Aspen::Graphics::Colors::GREEN, true, parent, name)
     {
-      CreateChild<Aspen::Physics::AABBCollider>()->SetSize(32, 32);
+      CreateChild<Aspen::Physics::AABBCollider>()->SetSize(64, 64);
     }
 
     void OnMouseClick()
     {
       Aspen::Log::Debug("I've been clicked");
       if (Aspen::Input::GetMouse().left.pressed)
-        Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("Main State");
+        Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("L1State");
     }
 };
 
-class MainState : public Aspen::GameState::GameState
-{
-  Aspen::Graphics::Rectangle *rect;
-public:
-    MainState(Aspen::Object::Object *parent = nullptr, std::string name = "Main State")
-      : Aspen::GameState::GameState(parent, name)
-    {
-      rect = 
-            // The child is a new rectangle
-            new Aspen::Graphics::Rectangle(
-                // x = 0, y = 0, width = 32, height = 32
-                SDL_Rect({0, 0, 32, 32}),
-                // It's black and filled
-                Aspen::Graphics::Colors::BLACK, true,
-                // this is its parent and its name is "Rectangle" (this can be omitted)
-                this, "Rectangle"
-                );
 
-        rect->CreateChild<Aspen::Physics::AABBCollider>()->SetSize(200,50);
-        // Create a new child
-        AddChild(rect);
+// class MainState : public Aspen::GameState::GameState
+// {
+//   Aspen::Graphics::Rectangle *rect;
+// public:
+//     MainState(Aspen::Object::Object *parent = nullptr, std::string name = "Main State")
+//       : Aspen::GameState::GameState(parent, name)
+//     {
+//       rect = 
+//             // The child is a new rectangle
+//             new Aspen::Graphics::Rectangle(
+//                 // x = 0, y = 0, width = 32, height = 32
+//                 SDL_Rect({0, 0, 32, 32}),
+//                 // It's black and filled
+//                 Aspen::Graphics::Colors::BLACK, true,
+//                 // this is its parent and its name is "Rectangle" (this can be omitted)
+//                 this, "Rectangle"
+//                 );
+
+//         rect->CreateChild<Aspen::Physics::AABBCollider>()->SetSize(200,50);
+//         // Create a new child
+//         AddChild(rect);
         
-    }
-};
-
-
+//     }
+// };
 
 class Player : public Aspen::Object::Object
 {
@@ -253,21 +252,26 @@ public:
 class MainMenu : public Aspen::GameState::GameState
 {
   Player *player;
+  Button *Start;
 
 public:
     MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
     {
       //player animation
-      player = new Player(this, "Player");
-      player->GetTransform()->SetPosition(200, 200);
-      AddChild(player);
+      // player = new Player(this, "Player");
+      // player->GetTransform()->SetPosition(200, 200);
+      // AddChild(player);
+
+      //Start Button
+      Start = new Button(this, "Button");
+      Start->GetTransform()->SetPosition(200, 200);
     }
 };
 
 class L1State : public Aspen::GameState::GameState
 {
     Aspen::Graphics::Camera *cam;
-    MyObject *obj;
+     *obj;
 
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
@@ -307,15 +311,15 @@ int main(int argc, char **argv)
   gfx->CreateChild<Aspen::Graphics::FontCache>();
   engine.AddChild(gfx);
 
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainState>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
   
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
   engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
   engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
 
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
   engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(false);
 
   while (engine)
     engine();
