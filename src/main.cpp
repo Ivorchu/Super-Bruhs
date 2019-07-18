@@ -14,22 +14,26 @@
 
 class MyState : public Aspen::GameState::GameState
 {
+  Aspen::Graphics::Rectangle *rect;
 public:
     MyState(Aspen::Object::Object *parent = nullptr, std::string name = "My State")
       : Aspen::GameState::GameState(parent, name)
     {
-        // Create a new child
-        AddChild(
+      rect = 
             // The child is a new rectangle
             new Aspen::Graphics::Rectangle(
                 // x = 0, y = 0, width = 32, height = 32
-                SDL_Rect({0, 0, 1920, 32}),
+                SDL_Rect({0, 0, 32, 32}),
                 // It's black and filled
                 Aspen::Graphics::Colors::BLACK, true,
                 // this is its parent and its name is "Rectangle" (this can be omitted)
                 this, "Rectangle"
-                )
-            );
+                );
+
+        rect->CreateChild<Aspen::Physics::AABBCollider>()->SetSize(200,50);
+        // Create a new child
+        AddChild(rect);
+        
     }
 };
 
