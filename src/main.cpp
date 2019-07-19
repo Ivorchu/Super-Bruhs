@@ -94,9 +94,9 @@ public:
     {
       y = -30;
     }
-    else if (GetTransform()->GetYPosition() > 642)
+    else if (GetTransform()->GetYPosition() > 970)
     {
-      GetTransform()->SetYPosition(642);
+      GetTransform()->SetYPosition(970);
       y = 0;
     }
     if (Aspen::Input::KeyHeld(SDLK_a))
@@ -110,9 +110,9 @@ public:
       animation6->Deactivate();
       x = -5;
     }
-    else if (GetTransform()->GetXPosition() > 1250)
+    else if (GetTransform()->GetXPosition() > 1900)
     {
-    GetTransform()->SetXPosition(1250);
+    GetTransform()->SetXPosition(1900);
     x = 0;
     }
     if (Aspen::Input::KeyPressed(SDLK_s) && (AnimationNumber == 1 || AnimationNumber == 5))
@@ -157,11 +157,7 @@ public:
       animation5->Deactivate();
       animation6->Deactivate();
     }
-    else if (GetTransform()->GetXPosition() < 30)
-    {
-    GetTransform()->SetXPosition(30);
-    x = 0;
-    }
+    
     if (Aspen::Input::KeyHeld(SDLK_d))
     {
       AnimationNumber = 1;
@@ -173,11 +169,7 @@ public:
       animation6->Deactivate();
       x = 5;
     }
-    else if (GetTransform()->GetYPosition() < 30)
-    {
-    GetTransform()->SetYPosition(30);
-    y = 0;
-    }
+    
     if (Aspen::Input::KeyHeld(SDLK_LCTRL) && (AnimationNumber == 1 || AnimationNumber == 3 ))
     {
       AnimationNumber = 5;
