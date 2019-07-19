@@ -103,9 +103,9 @@ public:
     {
       y = -30;
     }
-    else if (GetTransform()->GetYPosition() > 980)
+    else if (GetTransform()->GetYPosition() > 928)
     {
-      GetTransform()->SetYPosition(980);
+      GetTransform()->SetYPosition(928);
       y = 0;
     }
     if (Aspen::Input::KeyHeld(SDLK_a))
@@ -262,6 +262,15 @@ class L1State : public Aspen::GameState::GameState
     Grass *grass10;
     Grass *grass11;
     Grass *grass12;
+    Grass *grass13;
+    Grass *grass14;
+    Grass *grass15;
+    Grass *grass16;
+    Grass *grass17;
+    Grass *grass18;
+    Grass *grass19;
+    Grass *grass20;
+    Grass *grass21;
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
@@ -279,6 +288,15 @@ public:
   grass10 = new Grass();  
   grass11 = new Grass();  
   grass12 = new Grass();
+  grass13 = new Grass();
+  grass14 = new Grass();
+  grass15 = new Grass();
+  grass16 = new Grass();
+  grass17 = new Grass();
+  grass18 = new Grass();
+  grass19 = new Grass();
+  grass20 = new Grass();
+  grass21 = new Grass();
   player = new Player();
   //   cam = CreateChild<Aspen::Graphics::Camera>();
   //   cam->SelectCamera();
@@ -296,6 +314,16 @@ public:
   grass10->GetTransform()->SetPosition(909, 1040);
   grass11->GetTransform()->SetPosition(1005, 1040);
   grass12->GetTransform()->SetPosition(1101, 1040);
+  grass13->GetTransform()->SetPosition(1197, 1040);
+  grass14->GetTransform()->SetPosition(1293, 1040);
+  grass15->GetTransform()->SetPosition(1389, 1040);
+  grass16->GetTransform()->SetPosition(1485, 1040);
+  grass17->GetTransform()->SetPosition(1581, 1040);
+  grass18->GetTransform()->SetPosition(1677, 1040);
+  grass19->GetTransform()->SetPosition(1773, 1040);
+  grass20->GetTransform()->SetPosition(1869, 1040);
+  grass21->GetTransform()->SetPosition(1965, 1040);
+  
   
   AddChild(grass1);
   AddChild(grass2);
@@ -309,6 +337,15 @@ public:
   AddChild(grass10);
   AddChild(grass11);
   AddChild(grass12);
+  AddChild(grass13);
+  AddChild(grass14);
+  AddChild(grass15);
+  AddChild(grass16);
+  AddChild(grass17);
+  AddChild(grass18);
+  AddChild(grass19);
+  AddChild(grass20);
+  AddChild(grass21);
   }
 
   // void OnUpdate()
