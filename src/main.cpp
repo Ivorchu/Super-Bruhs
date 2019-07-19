@@ -17,9 +17,9 @@ class Button : public Aspen::Graphics::Rectangle
 {
 public:
     Button(Aspen::Object::Object *parent = nullptr, std::string name = "Button")
-      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 64, 64}), Aspen::Graphics::Colors::GREEN, true, parent, name)
+      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 512, 64}), Aspen::Graphics::Colors::GREEN, true, parent, name)
     {
-      CreateChild<Aspen::Physics::AABBCollider>()->SetSize(64, 64);
+      CreateChild<Aspen::Physics::AABBCollider>()->SetSize(512, 64);
     }
 
     void OnMouseClick()
@@ -29,32 +29,6 @@ public:
         Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("Level 1 State");
     }
 };
-
-
-// class MainState : public Aspen::GameState::GameState
-// {
-//   Aspen::Graphics::Rectangle *rect;
-// public:
-//     MainState(Aspen::Object::Object *parent = nullptr, std::string name = "Main State")
-//       : Aspen::GameState::GameState(parent, name)
-//     {
-//       rect = 
-//             // The child is a new rectangle
-//             new Aspen::Graphics::Rectangle(
-//                 // x = 0, y = 0, width = 32, height = 32
-//                 SDL_Rect({0, 0, 32, 32}),
-//                 // It's black and filled
-//                 Aspen::Graphics::Colors::BLACK, true,
-//                 // this is its parent and its name is "Rectangle" (this can be omitted)
-//                 this, "Rectangle"
-//                 );
-
-//         rect->CreateChild<Aspen::Physics::AABBCollider>()->SetSize(200,50);
-//         // Create a new child
-//         AddChild(rect);
-        
-//     }
-// };
 
 class Player : public Aspen::Object::Object
 {
@@ -115,15 +89,14 @@ public:
   {
     double x = GetRigidbody()->GetVelocityX();
     double y = GetRigidbody()->GetVelocityY();
-    int AnimationNumber = 1;
 
     if (Aspen::Input::KeyPressed(SDLK_w))
     {
       y = -30;
     }
-    else if (GetTransform()->GetYPosition() > 975)
+    else if (GetTransform()->GetYPosition() > 642)
     {
-      GetTransform()->SetYPosition(975);
+      GetTransform()->SetYPosition(642);
       y = 0;
     }
     if (Aspen::Input::KeyHeld(SDLK_a))
@@ -137,9 +110,9 @@ public:
       animation6->Deactivate();
       x = -5;
     }
-    else if (GetTransform()->GetXPosition() > 1900)
+    else if (GetTransform()->GetXPosition() > 1250)
     {
-    GetTransform()->SetXPosition(1900);
+    GetTransform()->SetXPosition(1250);
     x = 0;
     }
     if (Aspen::Input::KeyPressed(SDLK_s) && (AnimationNumber == 1 || AnimationNumber == 5))
@@ -253,38 +226,42 @@ class MainMenu : public Aspen::GameState::GameState
 {
   Player *player;
   Button *Start;
+  Aspen::Graphics::UI::Text *startText;
 
 public:
     MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
     {
       //Start Button
       Start = new Button();
-      Start->GetTransform()->SetPosition(200, 200);
+      Start->GetTransform()->SetPosition(500, 500);
       AddChild(Start);
+      startText = new Aspen::Graphics::UI::Text("Start", "default", 64, this, "Start Text");
+      AddChild(startText);
+      startText->GetTransform()->SetPosition(500, 500);
     }
 };
 
 class L1State : public Aspen::GameState::GameState
 {
-    Aspen::Graphics::Camera *cam;
+  //  Aspen::Graphics::Camera *cam;
     Player *player;
-    Button *Start;
+
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
-    player = new Player();
-    cam = CreateChild<Aspen::Graphics::Camera>();
-    cam->SelectCamera();
-    AddChild(player);
+  player = new Player();
+  //   cam = CreateChild<Aspen::Graphics::Camera>();
+  //   cam->SelectCamera();
+     AddChild(player);
   }
 
-  void OnUpdate()
-  {
-    float cx = player->GetTransform()->GetXPosition() - Aspen::Graphics::DEFAULT_WINDOW_WIDTH / 2.0f;
-    float cy = player->GetTransform()->GetYPosition() - Aspen::Graphics::DEFAULT_WINDOW_HEIGHT / 2.0f;
-    cam->GetTransform()->SetPosition(std::max(std::min(cx, 100.0f), -100.0f), cy);
-  }
+  // void OnUpdate()
+  // {
+  //   float cx = player->GetTransform()->GetXPosition() - Aspen::Graphics::DEFAULT_WINDOW_WIDTH / 2.0f;
+  //   float cy = player->GetTransform()->GetYPosition() - Aspen::Graphics::DEFAULT_WINDOW_HEIGHT / 2.0f;
+  //   cam->GetTransform()->SetPosition(std::max(std::min(cx, 100.0f), -100.0f), cy);
+  // }
 };
 
 int main(int argc, char **argv)
@@ -300,13 +277,13 @@ int main(int argc, char **argv)
   gfx->CreateChild<Aspen::Graphics::FontCache>();
   engine.AddChild(gfx);
 
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(false);
-
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
   engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
   engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
+
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(false);
 
   while (engine)
     engine();
