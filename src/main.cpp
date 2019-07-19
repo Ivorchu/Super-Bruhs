@@ -30,6 +30,15 @@ public:
     }
 };
 
+class Grass : public Aspen::Graphics::Sprite
+{
+  public:
+  Grass(Aspen::Object::Object *parent = nullptr, std::string name = "Grass") : Aspen::Graphics::Sprite ("./resources/Grass.png" ,parent, name)
+  {
+    GetTransform()->SetPosition(500,500);
+  }
+};
+
 class Player : public Aspen::Object::Object
 {
   Aspen::Graphics::Animation *animation1;
@@ -94,9 +103,9 @@ public:
     {
       y = -30;
     }
-    else if (GetTransform()->GetYPosition() > 970)
+    else if (GetTransform()->GetYPosition() > 980)
     {
-      GetTransform()->SetYPosition(970);
+      GetTransform()->SetYPosition(980);
       y = 0;
     }
     if (Aspen::Input::KeyHeld(SDLK_a))
@@ -241,15 +250,65 @@ class L1State : public Aspen::GameState::GameState
 {
   //  Aspen::Graphics::Camera *cam;
     Player *player;
-
+    Grass *grass1;
+    Grass *grass2;
+    Grass *grass3;
+    Grass *grass4;
+    Grass *grass5;
+    Grass *grass6;
+    Grass *grass7;
+    Grass *grass8;
+    Grass *grass9;
+    Grass *grass10;
+    Grass *grass11;
+    Grass *grass12;
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
+
+  grass1 = new Grass();  
+  grass2 = new Grass();  
+  grass3 = new Grass();  
+  grass4 = new Grass();  
+  grass5 = new Grass();  
+  grass6 = new Grass();  
+  grass7 = new Grass();  
+  grass8 = new Grass();  
+  grass9 = new Grass();  
+  grass10 = new Grass();  
+  grass11 = new Grass();  
+  grass12 = new Grass();
   player = new Player();
   //   cam = CreateChild<Aspen::Graphics::Camera>();
   //   cam->SelectCamera();
      AddChild(player);
+
+  grass1->GetTransform()->SetPosition(45, 1040);
+  grass2->GetTransform()->SetPosition(141, 1040);
+  grass3->GetTransform()->SetPosition(237, 1040);
+  grass4->GetTransform()->SetPosition(333, 1040);
+  grass5->GetTransform()->SetPosition(429, 1040);
+  grass6->GetTransform()->SetPosition(525, 1040);
+  grass7->GetTransform()->SetPosition(621, 1040);
+  grass8->GetTransform()->SetPosition(717, 1040);
+  grass9->GetTransform()->SetPosition(813, 1040);
+  grass10->GetTransform()->SetPosition(909, 1040);
+  grass11->GetTransform()->SetPosition(1005, 1040);
+  grass12->GetTransform()->SetPosition(1101, 1040);
+  
+  AddChild(grass1);
+  AddChild(grass2);
+  AddChild(grass3);
+  AddChild(grass4);
+  AddChild(grass5);
+  AddChild(grass6);
+  AddChild(grass7);
+  AddChild(grass8);
+  AddChild(grass9);
+  AddChild(grass10);
+  AddChild(grass11);
+  AddChild(grass12);
   }
 
   // void OnUpdate()
