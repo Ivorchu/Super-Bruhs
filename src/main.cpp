@@ -67,6 +67,7 @@ class Player : public Aspen::Object::Object
   int AnimationNumber = 1;
 
 public:
+  int velocity Player::GetVelocity();
   Player(Object *parent = nullptr, std::string name = "Player") : Aspen::Object::Object(parent, name)
   {
     //int Health = 100;
@@ -312,7 +313,8 @@ int main(int argc, char **argv)
   engine.AddChild(gfx);
 
   engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(true);
-  
+  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(false);
+
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetGravityStrength(1);
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
   engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
