@@ -252,6 +252,7 @@ public:
 
 class MainMenu : public Aspen::GameState::GameState
 {
+public:
   Player *player;
   Button *Start;
 
@@ -272,30 +273,20 @@ public:
 class L1State : public Aspen::GameState::GameState
 {
     Aspen::Graphics::Camera *cam;
-     *obj;
 
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
-    obj = CreateChild<MyObject>();
     cam = CreateChild<Aspen::Graphics::Camera>();
     cam->SelectCamera();
   }
 
   void OnUpdate()
   {
-    float cx = obj->GetTransform()->GetXPosition() - Aspen::Graphics::DEFAULT_WINDOW_WIDTH / 2.0f;
-    float cy = obj->GetTransform()->GetYPosition() - Aspen::Graphics::DEFAULT_WINDOW_HEIGHT / 2.0f;
+    float cx = player->GetTransform()->GetXPosition() - Aspen::Graphics::DEFAULT_WINDOW_WIDTH / 2.0f;
+    float cy = player->GetTransform()->GetYPosition() - Aspen::Graphics::DEFAULT_WINDOW_HEIGHT / 2.0f;
     cam->GetTransform()->SetPosition(std::max(std::min(cx, 100.0f), -100.0f), cy);
-    if (Aspen::Input::KeyHeld(SDLK_w))
-      obj->GetTransform()->ModifyYPosition(-1);
-    if (Aspen::Input::KeyHeld(SDLK_a))
-      obj->GetTransform()->ModifyXPosition(-1);
-    if (Aspen::Input::KeyHeld(SDLK_s))
-      obj->GetTransform()->ModifyXPosition(1);
-    if (Aspen::Input::KeyHeld(SDLK_d))
-      obj->GetTransform()->ModifyYPosition(1);
   }
 };
 
@@ -319,9 +310,6 @@ int main(int argc, char **argv)
   engine.FindChildOfType<Aspen::Physics::Physics>()->SetDrag(0.1);
   engine.FindChildOfType<Aspen::Time::Time>()->TargetFramerate(60);
   engine.FindChildOfType<Aspen::Graphics::Graphics>()->FindChildOfType<Aspen::Graphics::FontCache>()->LoadFont("resources/ABeeZee-Regular.ttf", "default");
-
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<L1State>(true);
-  engine.FindChildOfType<Aspen::GameState::GameStateManager>()->LoadState<MainMenu>(false);
 
   while (engine)
     engine();
