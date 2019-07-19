@@ -35,9 +35,20 @@ class Grass : public Aspen::Graphics::Sprite
   public:
   Grass(Aspen::Object::Object *parent = nullptr, std::string name = "Grass") : Aspen::Graphics::Sprite ("./resources/Grass.png" ,parent, name)
   {
-    GetTransform()->SetPosition(500,500);
+   CreateChild<Aspen::Physics::AABBCollider>()->SetSize(96,96);
   }
 };
+
+class Block : public Aspen::Graphics::Sprite
+{
+  public:
+  Block(Aspen::Object::Object *parent = nullptr, std::string name = "Grass") : Aspen::Graphics::Sprite ("./resources/Block.png" ,parent, name)
+  
+  {
+   CreateChild<Aspen::Physics::AABBCollider>()->SetSize(96,96);
+  }
+};
+
 
 class Player : public Aspen::Object::Object
 {
@@ -48,6 +59,7 @@ class Player : public Aspen::Object::Object
   Aspen::Graphics::Animation *animation5;
   Aspen::Graphics::Animation *animation6;
   int AnimationNumber = 1;
+  bool collided = false;
 
 public:
   Player(Object *parent = nullptr, std::string name = "Player") : Aspen::Object::Object(parent, name)
@@ -87,11 +99,14 @@ public:
     animation4->Deactivate();
     animation5->Deactivate();
     animation6->Deactivate();
+
+    CreateChild<Aspen::Physics::AABBCollider>()->SetSize(60, 128);
   }
 
   void OnCollision(Aspen::Physics::Collision c)
   {
     // Aspen::Log::Debug("I have been collided!");
+    collided = true;
   }
 
   void OnUpdate()
@@ -99,9 +114,9 @@ public:
     double x = GetRigidbody()->GetVelocityX();
     double y = GetRigidbody()->GetVelocityY();
 
-    if (Aspen::Input::KeyPressed(SDLK_w))
+    if (Aspen::Input::KeyPressed(SDLK_w) && collided == true)
     {
-      y = -30;
+      y = -35;
     }
     else if (GetTransform()->GetYPosition() > 928)
     {
@@ -188,7 +203,7 @@ public:
       animation4->Deactivate();
       animation5->Activate();
       animation6->Deactivate();
-    }
+    
     else if (Aspen::Input::KeyHeld(SDLK_LCTRL) && (AnimationNumber == 2 || AnimationNumber == 4 ))
     {
       AnimationNumber = 6;
@@ -220,6 +235,7 @@ public:
       animation6->Deactivate();
     }
     GetRigidbody()->SetCartesianVelocity(x, y);
+    collided = false;
   }
 };
 
@@ -271,11 +287,12 @@ class L1State : public Aspen::GameState::GameState
     Grass *grass19;
     Grass *grass20;
     Grass *grass21;
+    Block *block1;
+    Block *block2;
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
-
   grass1 = new Grass();  
   grass2 = new Grass();  
   grass3 = new Grass();  
@@ -298,6 +315,8 @@ public:
   grass20 = new Grass();
   grass21 = new Grass();
   player = new Player();
+  block1 = new Block();
+  block2 = new Block();
   //   cam = CreateChild<Aspen::Graphics::Camera>();
   //   cam->SelectCamera();
      AddChild(player);
@@ -323,8 +342,11 @@ public:
   grass19->GetTransform()->SetPosition(1773, 1040);
   grass20->GetTransform()->SetPosition(1869, 1040);
   grass21->GetTransform()->SetPosition(1965, 1040);
-  
-  
+  block1->GetTransform()->SetPosition(500, 875);
+  block2->GetTransform()->SetPosition(700, 729);
+
+  AddChild(block1);
+  AddChild(block2);  
   AddChild(grass1);
   AddChild(grass2);
   AddChild(grass3);
