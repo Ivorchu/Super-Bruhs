@@ -17,7 +17,7 @@ class Button : public Aspen::Graphics::Rectangle
 {
 public:
     Button(Aspen::Object::Object *parent = nullptr, std::string name = "Button")
-      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 512, 64}), Aspen::Graphics::Colors::GREEN, true, parent, name)
+      : Aspen::Graphics::Rectangle(SDL_Rect({0, 0, 512, 64}), Aspen::Graphics::Colors::WHITE, true, parent, name)
     {
       CreateChild<Aspen::Physics::AABBCollider>()->SetSize(512, 64);
     }
@@ -223,13 +223,17 @@ class MainMenu : public Aspen::GameState::GameState
 public:
     MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
     {
+      Aspen::Graphics::Sprite *bg = new Aspen::Graphics::Sprite("resources/title screen background.png");
+      bg->GetTransform()->SetPosition(1920 / 2, 1080 / 2);
+      bg->GetTransform()->SetPosition(1920 / 2, 1080 / 2);
+      AddChild(bg);
       //Start Button
       Start = new Button();
-      Start->GetTransform()->SetPosition(500, 500);
+      Start->GetTransform()->SetPosition(960, 540);
       AddChild(Start);
       startText = new Aspen::Graphics::UI::Text("Start", "default", 64, this, "Start Text");
       AddChild(startText);
-      startText->GetTransform()->SetPosition(500, 500);
+      startText->GetTransform()->SetPosition(960, 540);
     }
 };
 
