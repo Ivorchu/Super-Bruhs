@@ -26,7 +26,7 @@ public:
     {
       Aspen::Log::Debug("I've been clicked");
       if (Aspen::Input::GetMouse().left.pressed)
-        Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("L1State");
+        Aspen::Engine::Engine::Get()->FindChildOfType<Aspen::GameState::GameStateManager>()->SetCurrentState("Level 1 State");
     }
 };
 
@@ -67,7 +67,6 @@ class Player : public Aspen::Object::Object
   int AnimationNumber = 1;
 
 public:
-  int velocity Player::GetVelocity();
   Player(Object *parent = nullptr, std::string name = "Player") : Aspen::Object::Object(parent, name)
   {
     //int Health = 100;
@@ -252,34 +251,32 @@ public:
 
 class MainMenu : public Aspen::GameState::GameState
 {
-public:
   Player *player;
   Button *Start;
 
 public:
     MainMenu(Object *parent = nullptr, std::string name = "MainMenu") : GameState(parent, name)
     {
-      //player animation
-      // player = new Player(this, "Player");
-      // player->GetTransform()->SetPosition(200, 200);
-      // AddChild(player);
-
       //Start Button
-      Start = new Button(this, "Button");
+      Start = new Button();
       Start->GetTransform()->SetPosition(200, 200);
+      AddChild(Start);
     }
 };
 
 class L1State : public Aspen::GameState::GameState
 {
     Aspen::Graphics::Camera *cam;
-
+    Player *player;
+    Button *Start;
 public:
   L1State(Aspen::Object::Object *parent = nullptr, std::string name = "Level 1 State")
       : Aspen::GameState::GameState(parent, name)
   {
+    player = new Player();
     cam = CreateChild<Aspen::Graphics::Camera>();
     cam->SelectCamera();
+    AddChild(player);
   }
 
   void OnUpdate()
